@@ -32,7 +32,9 @@
             }
 
             function close() {
+                getCurrentWindow().destroy();
                 getCurrentWindow().close();
+                getCurrentWindow().destroy();
             }
 
             function min() {
@@ -63,18 +65,23 @@
                 margin: 40px 0;
                 user-select: initial;
                 position: relative;
+                border: 1px solid;
+                border-radius: 5px;
+                overflow: hidden;
+                padding: 5px;
             }
             
             .licence p {
                 height: 100px;
                 overflow: scroll;
                 overflow-x: hidden;
+                margin: 0;
             }
             
             .licence button {
                 position: absolute;
-                right: 20px;
-                bottom: 0;
+                right: 24px;
+                bottom: 3px;
             }
             
             .licence button {
@@ -104,10 +111,6 @@
             
             button {
                 user-select: none;
-            }
-            
-            input {
-                opacity: 1 !important;
             }
             
             input[type=checkbox] {

@@ -7,339 +7,64 @@
         <!-- <script defer src="../js/transparency-pointer.js"></script> -->
         <script defer src="../js/renderer.js"></script>
         <script>
-            function agreeToLicense() {
-                if (document.querySelector('input').checked) {
-                    document.getElementById('next').disabled = false;
-                } else {
-                    document.getElementById('next').disabled = true;
-                }
+            const {
+                remote,
+                ipcRenderer
+            } = require("electron");
+
+            function getCurrentWindow() {
+                return remote.getCurrentWindow();
             }
 
-            function copyLicense() {
-                navigator.clipboard.writeText(document.querySelector('div.licence p').innerText)
+            function close() {
+                getCurrentWindow().destroy();
+                getCurrentWindow().close();
+                getCurrentWindow().destroy();
             }
 
-            function next() {
-                window.location.href = "install.html";
+            function min() {
+                getCurrentWindow().minimize();
+            }
+
+            function updateInstallOption() {
+                document.querySelectorAll('input[name="installOption"]:checked').length == 1 ? document.getElementById('install').disabled = ![] : document.getElementById('install').disabled = !![];
+            }
+
+            function install() {
+                switch (document.querySelectorAll('input[name="installOption"]:checked')[0].id) {
+                    case 'canary':
+                        {
+                            return;
+                        };
+                    case 'stable':
+                        {
+                            return;
+                        };
+                    case 'PTB':
+                        {
+                            return;
+                        };
+                    default:
+                        {
+                            alert('Please select an install option.');
+                            return;
+                        }
+                };
+
             }
         </script>
-        <style>
-            * {
-                box-sizing: border-box;
-            }
-            
-            .checkbox {
-                display: inline-block;
-                padding: 10px 20px;
-                transform: translateZ(0);
-            }
-            
-            .checkbox label {
-                cursor: pointer;
-                padding-left: 0;
-            }
-            
-            .checkbox input[type=checkbox] {
-                opacity: 0;
-                position: absolute;
-                margin: 0;
-                z-index: -1;
-                width: 0;
-                height: 0;
-                overflow: hidden;
-                left: 0;
-                pointer-events: none;
-            }
-            
-            .checkbox .checkbox-material {
-                vertical-align: middle;
-                position: relative;
-                top: 3px;
-            }
-            
-            .checkbox .checkbox-material:before {
-                position: absolute;
-                left: 8px;
-                top: 2px;
-                content: "";
-                background-color: rgba(0, 0, 0, 0.5);
-                height: 4px;
-                width: 4px;
-                border-radius: 100%;
-                z-index: 1;
-                opacity: 0;
-                margin: 0;
-            }
-            
-            .checkbox .checkbox-material .check {
-                position: relative;
-                display: inline-block;
-                width: 20px;
-                height: 20px;
-                border: 2px solid;
-                border-radius: 2px;
-                overflow: hidden;
-                z-index: 1;
-            }
-            
-            .checkbox .checkbox-material .check:before {
-                position: absolute;
-                content: "";
-                transform: rotate(45deg);
-                display: block;
-                margin-top: -4px;
-                margin-left: 6px;
-                width: 0;
-                height: 0;
-                box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0 inset;
-                -webkit-animation: checkbox-off 0.3s forwards ease-out;
-                animation: checkbox-off 0.3s forwards ease-out;
-            }
-            
-            .checkbox input[type=checkbox]:focus+.checkbox-material .check:after {
-                opacity: 0.2;
-            }
-            
-            .checkbox input[type=checkbox]:checked+.checkbox-material .check:before {
-                box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
-                -webkit-animation: checkbox-on 0.3s forwards ease-out;
-                animation: checkbox-on 0.3s forwards ease-out;
-            }
-            
-            .checkbox input[type=checkbox]:not(:checked)+.checkbox-material:before {
-                -webkit-animation: rippleOff 700ms forwards ease-out;
-                animation: rippleOff 700ms forwards ease-out;
-            }
-            
-            .checkbox input[type=checkbox]:checked+.checkbox-material:before {
-                -webkit-animation: rippleOn 700ms forwards ease-out;
-                animation: rippleOn 700ms forwards ease-out;
-            }
-            
-            .checkbox input[type=checkbox]:not(:checked)+.checkbox-material .check:after {
-                -webkit-animation: rippleOff 700ms forwards ease-out;
-                animation: rippleOff 700ms forwards ease-out;
-            }
-            
-            .checkbox input[type=checkbox]:checked+.checkbox-material .check:after {
-                -webkit-animation: rippleOn 700ms forwards ease-out;
-                animation: rippleOn 700ms forwards ease-out;
-            }
-            
-            .checkbox input[type=checkbox][disabled]:not(:checked)~.checkbox-material .check:before,
-            .checkbox input[type=checkbox][disabled]+.circle {
-                opacity: 0.5;
-            }
-            
-            .checkbox input[type=checkbox][disabled]+.checkbox-material .check:after {
-                background-color: rgba(0, 0, 0, 0.84);
-                transform: rotate(-45deg);
-            }
-            
-            .coloured .checkbox-material .check {
-                color: #2FAEF8;
-            }
-            
-            .coloured .checkbox-material:before {
-                background-color: #2FAEF8;
-            }
-            
-            .coloured input[type=checkbox]:checked+.checkbox-material .check {
-                color: #2FAEF8;
-            }
-            
-            @-webkit-keyframes checkbox-on {
-                0% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px;
-                }
-                50% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px 2px 0 11px;
-                }
-                100% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
-                }
-            }
-            
-            @keyframes checkbox-on {
-                0% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px;
-                }
-                50% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px 2px 0 11px;
-                }
-                100% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px;
-                }
-            }
-            
-            @-webkit-keyframes checkbox-off {
-                0% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px, 0 0 0 0 inset;
-                }
-                25% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px, 0 0 0 0 inset;
-                }
-                50% {
-                    transform: rotate(45deg);
-                    margin-top: -4px;
-                    margin-left: 6px;
-                    width: 0px;
-                    height: 0px;
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px, 0 0 0 0 inset;
-                }
-                51% {
-                    transform: rotate(0deg);
-                    margin-top: -2px;
-                    margin-left: -2px;
-                    width: 20px;
-                    height: 20px;
-                    box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0px 0px 0 10px inset;
-                }
-                100% {
-                    transform: rotate(0deg);
-                    margin-top: -2px;
-                    margin-left: -2px;
-                    width: 20px;
-                    height: 20px;
-                    box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0px 0px 0 0px inset;
-                }
-            }
-            
-            @keyframes checkbox-off {
-                0% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px, 0 0 0 0 inset;
-                }
-                25% {
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 20px -12px 0 11px, 0 0 0 0 inset;
-                }
-                50% {
-                    transform: rotate(45deg);
-                    margin-top: -4px;
-                    margin-left: 6px;
-                    width: 0px;
-                    height: 0px;
-                    box-shadow: 0 0 0 10px, 10px -10px 0 10px, 32px 0px 0 20px, 0px 32px 0 20px, -5px 5px 0 10px, 15px 2px 0 11px, 0 0 0 0 inset;
-                }
-                51% {
-                    transform: rotate(0deg);
-                    margin-top: -2px;
-                    margin-left: -2px;
-                    width: 20px;
-                    height: 20px;
-                    box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0px 0px 0 10px inset;
-                }
-                100% {
-                    transform: rotate(0deg);
-                    margin-top: -2px;
-                    margin-left: -2px;
-                    width: 20px;
-                    height: 20px;
-                    box-shadow: 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0 0 0 0, 0px 0px 0 0px inset;
-                }
-            }
-            
-            @-webkit-keyframes rippleOn {
-                0% {
-                    opacity: 0.5;
-                }
-                100% {
-                    opacity: 0;
-                    transform: scale(13, 13);
-                }
-            }
-            
-            @keyframes rippleOn {
-                0% {
-                    opacity: 0.5;
-                }
-                100% {
-                    opacity: 0;
-                    transform: scale(13, 13);
-                }
-            }
-            
-            @-webkit-keyframes rippleOff {
-                0% {
-                    opacity: 0.5;
-                }
-                100% {
-                    opacity: 0;
-                    transform: scale(13, 13);
-                }
-            }
-            
-            @keyframes rippleOff {
-                0% {
-                    opacity: 0.5;
-                }
-                100% {
-                    opacity: 0;
-                    transform: scale(13, 13);
-                }
-            }
-        </style>
+        <link rel="stylesheet" href="https://unpkg.com/xp.css">
         <style>
             * {
                 font-family: monospace;
                 user-select: none;
             }
             
-            *::-webkit-scrollbar {
-                width: 12px;
-            }
-            
-            *::-webkit-scrollbar-thumb {
-                background-color: #2f3136;
-                border-radius: 20px;
-                border: 3px solid #131718;
-            }
-            
+            body,
             html {
                 height: 100%;
-                background: transparent;
-                border-radius: 50px;
-            }
-            
-            body {
-                margin: 0;
-                background: #131718;
-                color: white;
-                border-radius: 20px;
-                padding: 20px;
-                -webkit-app-region: drag;
-                height: 100%;
                 overflow: hidden;
-            }
-            
-            body * {
-                -webkit-app-region: no-drag;
-            }
-            
-            button {
-                font-family: monospace;
-                font-weight: 600;
-                background: #202225;
-                border: none;
-                color: white;
-                padding: 5px 10px;
-                border-radius: 5px;
-                outline: none;
-            }
-            
-            button:active {
-                color: #4dff88 !important;
-            }
-            
-            button:hover {
-                color: #adffc9;
-            }
-            
-            button[disabled] {
-                color: #e54848;
-            }
-            
-            button[disabled]:hover {
-                color: #cd2323;
+                background-color: #00000000;
             }
             
             .clickable {
@@ -366,23 +91,80 @@
             .install>div>.sep {
                 width: 100%;
             }
+            
+            .notClickable,
+            button,
+            input {
+                -webkit-app-region: no-drag;
+            }
+            
+            body {
+                -webkit-app-region: drag;
+            }
+            
+            button {
+                user-select: none;
+            }
+            
+            input[type=checkbox] {
+                -webkit-appearance: checkbox !important;
+            }
+            
+            input[type=radio] {
+                -webkit-appearance: radio !important;
+                z-index: 1000;
+            }
+            
+            .window {
+                margin: 0 !important;
+                width: 100% !important;
+                height: 95%;
+            }
+            
+            .title-bar-controls button[disabled] {
+                filter: opacity(0.7);
+            }
+            
+            input[type=checkbox]:checked+label:after {
+                /* transform: translateY(60%); */
+            }
+            
+            .window-body .title {
+                font-size: large;
+                font-weight: bold;
+                width: 75%;
+                display: inline-block;
+                word-wrap: break-word;
+            }
         </style>
     </head>
 
     <body>
-        <h1 class="clickable">Install</h1>
-        <div class="install clickable">
-            <div class="native clickable"><img class="clickable" src="../assets/defalt.ico" width="40">
-                <h3 class="clickable">Defalt</h3>
-                <div class='sep'></div><button>install</button><button>uninstall</button></div>
-            <div class="ptb clickable"><img class="clickable" src="../assets/defalt.ico" width="40">
-                <h3 class="clickable">PTB</h3>
-                <div class='sep'></div><button>install</button><button>uninstall</button></div>
-            <div class="cannary clickable"><img class="clickable" src="../assets/app.ico" width="40">
-                <h3 class="clickable">Canary</h3>
-                <div class='sep'></div><button>install</button><button>uninstall</button></div>
+        <div class="window" style="margin: 32px; width: 250px">
+            <div class="title-bar">
+                <div class="title-bar-text">
+                    Install
+                </div>
+
+                <div class="title-bar-controls">
+                    <button onclick='min()' aria-label="Minimize"></button>
+                    <button style='cursor:not-allowed' aria-label="Maximize" disabled></button>
+                    <button onclick='close()' aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <span class="title">Select the discord client you want to install into:</span><br><br>
+                <input name="installOption" onclick='updateInstallOption()' id='stable' type="radio"><label for="defalt">install for Discord stable</label><br>
+                <input name="installOption" onclick='updateInstallOption()' id='canary' type="radio"><label for="canary">install for Discord canary</label><br>
+                <input name="installOption" onclick='updateInstallOption()' id='PTB' type="radio"><label for="PTB">install for Discord PTB</label>
+                <br>
+                <section class="field-row" style="justify-content: flex-end">
+                    <button onclick="window.location='index.html'">Back</button>
+                    <button id='install' disabled>Install</button>
+                </section>
+
+            </div>
         </div>
-        <button onclick='window.location="index.html"'>back</button>
     </body>
 
 </html>

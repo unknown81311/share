@@ -14,9 +14,9 @@ electron_1.app.on('ready', () => {
         height: 360,
         width: 500
     });
-    // win.setResizable(false);
+    win.setResizable(false);
     const d = new Date(), day = d.getMonth() + '|' + d.getDate();
-    win.loadFile(__dirname + `/html/${day == '8|24' || day == '10|25' ? 'xp/' : ''}index.html`);
+    win.loadFile(__dirname + `/html/${true ? 'xp/' : ''}index.html`); //day=='8|24'||day=='10|25'?
     console.log('initialized');
     win.on('ready-to-show', () => {
         win.show();
