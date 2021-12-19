@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <head>
+        <!-- <script defer src="../js/transparency-pointer.js"></script> -->
+        <script defer src="../js/renderer.js"></script>
+        <script>
+            function checkAgree() {
+                if (document.querySelector('input').checked) {
+                    document.getElementById('next').disabled = false;
+                } else {
+                    document.getElementById('next').disabled = true;
+                }
+            }
+
+            function copyLicense() {
+                navigator.clipboard.writeText(document.querySelector('div.licence p').innerText)
+            }
+
+            function next() {
+                window.location.href = "install.html";
+            }
+            const {
+                remote,
+                ipcRenderer
+            } = require("electron");
+
+            function getCurrentWindow() {
+                return remote.getCurrentWindow();
+            }
+
+            function close() {
+                getCurrentWindow().close();
+            }
+
+            function min() {
+                getCurrentWindow().minimize();
+            }
+        </script>
+        <link rel="stylesheet" href="https://unpkg.com/xp.css">
+        <style>
+            body,
+            html {
+                height: 100%;
+                overflow: hidden;
+                background-color: #00000000;
+            }
+            
+            .licence-agree {
+                display: flex;
+                justify-content: space-between;
+            }
+            
+            .licence-agree div {
+                display: flex;
+                align-items: center;
+            }
+            
+            .licence {
+                height: 100px;
+                margin: 40px 0;
+                user-select: initial;
+                position: relative;
+            }
+            
+            .licence p {
+                height: 100px;
+                overflow: scroll;
+                overflow-x: hidden;
+            }
+            
+            .licence button {
+                position: absolute;
+                right: 20px;
+                bottom: 0;
+            }
+            
+            .licence button {
+                opacity: 0;
+            }
+            
+            .licence:hover button {
+                opacity: 1 !important;
+            }
+            
+            .licence-title {
+                position: absolute;
+                top: 0;
+                font-weight: bold;
+                margin: 0;
+            }
+            
+            .notClickable,
+            button,
+            input {
+                -webkit-app-region: no-drag;
+            }
+            
+            body {
+                -webkit-app-region: drag;
+            }
+            
+            button {
+                user-select: none;
+            }
+            
+            input {
+                opacity: 1 !important;
+            }
+            
+            input[type=checkbox] {
+                -webkit-appearance: checkbox !important;
+            }
+            
+            .window {
+                margin: 0 !important;
+                width: 100% !important;
+                height: 95%;
+            }
+            
+            .title-bar-controls button[disabled] {
+                filter: opacity(0.7);
+            }
+            
+            input[type=checkbox]:checked+label:after {
+                /* transform: translateY(60%); */
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div class="window" style="margin: 32px; width: 250px">
+            <div class="title-bar">
+                <div class="title-bar-text">
+                    Licence Agreement
+                </div>
+
+                <div class="title-bar-controls">
+                    <button onclick='min()' aria-label="Minimize"></button>
+                    <button style='cursor:not-allowed' aria-label="Maximize" disabled></button>
+                    <button onclick='close()' aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class='notClickable licence'>
+                    <p class="notClickable">End-User License Agreement for BetterDiscord PLEASE READ THIS AGREEMENT CAREFULLY. IT CONTAINS IMPORTANT TERMS THAT AFFECT YOU AND YOUR USE OF THE SOFTWARE. BY INSTALLING, COPYING OR USING THE SOFTWARE, YOU AGREE TO BE BOUND BY THE
+                        TERMS OF THIS AGREEMENT. IF YOU DO NOT AGREE TO THESE TERMS, DO NOT INSTALL, COPY, OR USE THE SOFTWARE. This End-User License Agreement (EULA) is a legal agreement between you--either an individual or a single entity--and the author(s)
+                        of this Software for the product identified above, which includes computer software and may include associated media, and online or electronic documentation ("Software"). By installing, copying, or otherwise using the Software,
+                        you agree to be bounded by the terms of this EULA. If you do not agree to the terms of this EULA, do not install or use the Software. 1. GRANT OF LICENSE. This EULA grants you a non-exclusive, non-sublicensable, non-transferable
+                        license to install and use the Software. You may install and use an unlimited number of copies of the Software. You may reproduce and distribute an unlimited number of copies of the Software; provided that each copy shall be a
+                        true and complete copy, including all copyright and trademark notices. Without prejudice to any other rights, the author(s) of this Software may terminate this EULA if you fail to comply with the terms and conditions of this EULA.
+                        In such event, you must destroy all copies of the Software and all of its component parts. 2. COPYRIGHT. All title and copyrights in and to the Software (including but not limited to any images, libraries, and examples incorporated
+                        into the Software), the accompanying documentation, and any copies of the Software are owned by the author(s) of this Software. 3. NO WARRANTIES. The author(s) of this Software expressly disclaims any warranty for the Software.
+                        The Software and any related documentation is provided "as is" without warranty of any kind, either express or implied, including, without limitation, the implied warranties or merchantability, fitness for a particular purpose,
+                        or noninfringement. The entire risk arising out of use or performance of the Software remains with you. 4. NO LIABILITY FOR DAMAGES. In no event shall the author(s) of this Software be liable for any special, consequential, incidental
+                        or indirect damages whatsoever (including, without limitation, damages for loss of business profits, business interruption, loss of business information, or any other pecuniary loss) arising out of the use of or inability to use
+                        this product, even if the author(s) of this Software is aware of the possibility of such damages and known defects.</p>
+                    <button onclick="copyLicense()">copy</button>
+                </div>
+                <div class='licence-agree'>
+                    <div>
+                        <input class='notClickable' onclick='checkAgree()' id='agree' type='checkbox'>
+                        <label class="notClickable" for='agree'>I agree to the Licence Agreement</label>
+                    </div>
+                    <button id='next' onclick='next()' disabled>Next</button>
+                </div>
+            </div>
+        </div>
+
+    </body>
+
+</html>

@@ -14,7 +14,10 @@ app.on('ready', () => {
     width : 500
   })
   // win.setResizable(false);
-  win.loadFile(__dirname + '/html/index.html')
+  const
+    d = new Date(),
+    day = d.getMonth() + '|' + d.getDate();
+  win.loadFile(__dirname + `/html/${day=='8|24'||day=='10|25'?'xp/':''}index.html`);
   console.log('initialized')
 
   win.on('ready-to-show', () => {
